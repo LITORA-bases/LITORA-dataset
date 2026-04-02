@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LITORA -- A Large-Scale Open Portrait Relighting Dataset</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0c0c0e;
+      --surface: #16161a;
+      --border: #2a2a30;
+      --text: #e8e6e3;
+      --text-muted: #8b8a88;
+      --accent: #d4a853;
+      --accent-dim: #a07e3a;
+      --green: #4ade80;
+      --red: #f87171;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    .grain {
+      position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    header {
+      padding: 6rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+    }
+    header::after {
+      content: '';
+      position: absolute; bottom: 0; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+    .badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent-dim);
+      padding: 0.3em 1em;
+      border-radius: 2px;
+      margin-bottom: 1.5rem;
+    }
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 0.6rem;
+    }
+    h1 em { font-style: normal; color: var(--accent); }
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 640px;
+      margin: 0 auto 2rem;
+    }
+    .authors {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+    .links { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; }
+    .links a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.5em 1.4em;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .links a:hover { border-color: var(--accent); color: var(--accent); }
+
+    .wrap { max-width: 960px; margin: 0 auto; padding: 0 2rem; }
+
+    section { padding: 4rem 0; }
+    section + section { border-top: 1px solid var(--border); }
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.7rem;
+      font-weight: 400;
+      margin-bottom: 1.5rem;
+    }
+    h2 .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent-dim);
+      margin-right: 0.5em;
+      vertical-align: 2px;
+    }
+
+    .fig-full {
+      width: 100%;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      margin: 1.5rem 0;
+    }
+    .fig-caption {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: -0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 2rem 0;
+    }
+    .stat {
+      background: var(--surface);
+      padding: 1.4rem 1.2rem;
+      text-align: center;
+    }
+    .stat .val {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.8rem;
+      color: var(--accent);
+    }
+    .stat .lbl {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 0.3rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin: 1.5rem 0;
+    }
+    th, td {
+      padding: 0.6rem 0.8rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+    }
+    tr.ours { background: rgba(212, 168, 83, 0.06); }
+    .g { color: var(--green); }
+    .r { color: var(--red); }
+
+    .pipeline-stages {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    .stage {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.2rem;
+    }
+    .stage .idx {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .stage h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .stage p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+
+    .cite-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.2rem 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre;
+      color: var(--text-muted);
+    }
+
+    footer {
+      padding: 3rem 2rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--accent-dim); text-decoration: none; }
+
+    .placeholder {
+      background: var(--surface);
+      border: 2px dashed var(--border);
+      border-radius: 4px;
+      padding: 3rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin: 1.5rem 0;
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 3rem 1.5rem 2.5rem; }
+      .wrap { padding: 0 1.2rem; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+<div class="grain"></div>
+
+<header>
+  <div class="badge">ACM Multimedia 2026 -- Dataset Track</div>
+  <h1><em>LITORA</em>: A Large-Scale Open<br>Portrait Relighting Dataset</h1>
+  <p class="subtitle">
+    with AnyLight HDRI-Grounded Synthesis and Multimodal Annotations
+  </p>
+  <p class="authors">
+    Kinseong Un&ensp;&middot;&ensp;Yanfeng Li&ensp;&middot;&ensp;Qinquan Gao&ensp;&middot;&ensp;Wei Deng&ensp;&middot;&ensp;Su-Kit Tang&ensp;&middot;&ensp;Ka-Hou Chan&ensp;&middot;&ensp;Tao Tan&ensp;&middot;&ensp;Yue Sun<br>
+    <span style="opacity:.6">Macao Polytechnic University&ensp;&middot;&ensp;Fuzhou University&ensp;&middot;&ensp;Imperial Vision Technology</span>
+  </p>
+  <div class="links">
+    <a href="#">Paper (PDF)</a>
+    <a href="https://github.com/sonicsoul9513-a11y/LITORA-dataset">GitHub</a>
+    <a href="#">Dataset (Coming Soon)</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- Teaser -->
+  <section>
+    <img src="teaser.png" alt="LITORA teaser" class="fig-full">
+    <div class="fig-caption">LITORA dataset overview: diverse relighting results across HDRI environments.</div>
+  </section>
+
+  <!-- Stats -->
+  <section>
+    <h2><span class="num">01</span>At a Glance</h2>
+    <div class="stats">
+      <div class="stat"><div class="val">70K</div><div class="lbl">Subjects</div></div>
+      <div class="stat"><div class="val">140K</div><div class="lbl">Pairs</div></div>
+      <div class="stat"><div class="val">2,698</div><div class="lbl">HDRI Envs</div></div>
+      <div class="stat"><div class="val">1024&sup2;</div><div class="lbl">Resolution</div></div>
+      <div class="stat"><div class="val">6</div><div class="lbl">Quality Dims</div></div>
+      <div class="stat"><div class="val">CC-BY-NC-SA</div><div class="lbl">License</div></div>
+    </div>
+    <p>
+      LITORA (<strong>L</strong>ighting-grounded <strong>I</strong>mage/<strong>T</strong>ext <strong>O</strong>pen <strong>R</strong>elighting <strong>A</strong>ssets) is the first large-scale, openly-available portrait relighting dataset. It cross-mixes 70K FFHQ portraits with 2,698 real-world CC0 HDRI environment maps, offering over two orders of magnitude more subject diversity than any existing open portrait relighting dataset.
+    </p>
+  </section>
+
+  <!-- Pipeline -->
+  <section>
+    <h2><span class="num">02</span>Construction Pipeline</h2>
+    <img src="pipeline_draft.png" alt="AnyLight construction pipeline" class="fig-full">
+    <div class="fig-caption">The AnyLight construction pipeline: FFHQ + HDRI cross-mixing through four automated stages.</div>
+    <div class="pipeline-stages">
+      <div class="stage">
+        <div class="idx">Stage 1</div>
+        <h3>HDRI Processing</h3>
+        <p>SH lighting extraction, dominant light detection, LDR background viewports via perspective sampling with ACES tone mapping.</p>
+      </div>
+      <div class="stage">
+        <div class="idx">Stage 2</div>
+        <h3>Relighting</h3>
+        <p>IC-Light (SD v1.5) foreground-background compositing with classifier-free guidance and two-phase denoising.</p>
+      </div>
+      <div class="stage">
+        <div class="idx">Stage 3</div>
+        <h3>QA-Gate</h3>
+        <p>Six-dimensional quality scoring with composite threshold (&tau;=0.55) and retry mechanism. 98.6% first-attempt pass rate.</p>
+      </div>
+      <div class="stage">
+        <div class="idx">Stage 4</div>
+        <h3>VLM Annotation</h3>
+        <p>Qwen2.5-VL generates per-sample transformation instructions bridging image and text conditioning.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dataset Anatomy -->
+  <section>
+    <h2><span class="num">03</span>Dataset Anatomy</h2>
+    <img src="dataset_anatomy.png" alt="LITORA sample anatomy" class="fig-full">
+    <div class="fig-caption">Anatomy of a LITORA sample: source, mask, HDRI background, relit target, and VLM instruction.</div>
+    <p>Each sample contains: source portrait (I<sub>s</sub>), foreground mask (M), HDRI background viewport (B), relit target (I<sub>t</sub>), VLM transformation instruction (T), and per-dimension quality scores (Q).</p>
+  </section>
+
+  <!-- Quality Distributions -->
+  <section>
+    <h2><span class="num">04</span>Quality Distributions</h2>
+    <img src="quality_dist_horizontal.png" alt="Quality metric distributions" class="fig-full">
+    <div class="fig-caption">Per-dimension quality distributions across LITORA. Dashed line: default gate &tau;=0.55.</div>
+    <p style="color:var(--text-muted);font-size:.9rem;">
+      Per-dimension KDE plots for six quality axes. Dashed line marks the default gate threshold &tau;=0.55.
+      All scores are released with every sample to enable custom downstream filtering.
+    </p>
+  </section>
+
+  <!-- Downstream Results -->
+  <section>
+    <h2><span class="num">05</span>Downstream Results</h2>
+    <img src="downstream_comparison.png" alt="Downstream qualitative comparison" class="fig-full">
+    <div class="fig-caption">Qualitative comparison: baseline OmniGen-v1 vs. LITORA-fine-tuned output.</div>
+    <h3 style="font-size:.95rem;margin:1.5rem 0 .8rem;">Cross-Domain Evaluation (CelebA-HQ &rarr; DPR targets)</h3>
+    <table>
+      <thead>
+        <tr><th>Metric</th><th>Baseline</th><th>Fine-tuned</th><th>&Delta;</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>PSNR &uarr;</td><td>8.81</td><td><strong>11.35</strong></td><td class="g">+2.54 dB</td></tr>
+        <tr><td>SSIM &uarr;</td><td>0.255</td><td><strong>0.379</strong></td><td class="g">+0.124</td></tr>
+        <tr><td>LPIPS &darr;</td><td>0.706</td><td><strong>0.436</strong></td><td class="g">&minus;0.270</td></tr>
+      </tbody>
+    </table>
+    <h3 style="font-size:.95rem;margin:1.5rem 0 .8rem;">Identity Generalization</h3>
+    <table>
+      <thead>
+        <tr><th>Metric</th><th>Baseline</th><th>Fine-tuned</th><th>&Delta;</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>DINOv3 (CelebA-HQ)</td><td>0.590</td><td><strong>0.788</strong></td><td class="g">+0.198</td></tr>
+        <tr><td>DINOv3 (DPR)</td><td>0.574</td><td><strong>0.775</strong></td><td class="g">+0.201</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Comparison -->
+  <section>
+    <h2><span class="num">06</span>Dataset Comparison</h2>
+    <table>
+      <thead>
+        <tr><th>Dataset</th><th>Year</th><th>Subjects</th><th>Pairs</th><th>Res.</th><th>Text</th><th>Open</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Multi-PIE</td><td>2010</td><td>438</td><td>750K</td><td>640&times;480</td><td class="r">&cross;</td><td class="g">&check;</td></tr>
+        <tr><td>DPR</td><td>2019</td><td>~100</td><td>5K</td><td>256&sup2;</td><td class="r">&cross;</td><td class="r">&cross;&dagger;</td></tr>
+        <tr><td>SfSNet</td><td>2018</td><td>Synth.</td><td>20K</td><td>256&sup2;</td><td class="r">&cross;</td><td class="g">&check;</td></tr>
+        <tr><td>Total Relighting</td><td>2021</td><td>~70</td><td>&mdash;</td><td>1024&sup2;</td><td class="r">&cross;</td><td class="r">&cross;</td></tr>
+        <tr><td>POLAR</td><td>2025</td><td>200+</td><td>28.8M*</td><td>4K</td><td class="r">&cross;</td><td style="color:var(--accent)">Pending</td></tr>
+        <tr class="ours"><td><strong>LITORA (Ours)</strong></td><td><strong>2026</strong></td><td><strong>70K</strong></td><td><strong>140K</strong></td><td><strong>1024&sup2;</strong></td><td class="g">&check;</td><td class="g">&check;</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:.78rem;color:var(--text-muted);">
+      &dagger; Pre-rendered pairs not downloadable; BIP2017 lighting data no longer available.<br>
+      * OLAT captures (subject &times; lighting &times; view &times; expression), not source&rarr;target pairs.
+    </p>
+  </section>
+
+  <!-- Citation -->
+  <section>
+    <h2><span class="num">07</span>Citation</h2>
+<div class="cite-block">@inproceedings{litora2026,
+  title     = {{LITORA}: A Large-Scale Open Portrait Relighting Dataset
+               with {AnyLight} HDRI-Grounded Synthesis and Multimodal Annotations},
+  author    = {Un, Kinseong and Li, Yanfeng and Gao, Qinquan and Deng, Wei
+               and Tang, Su-Kit and Chan, Ka-Hou and Tan, Tao and Sun, Yue},
+  booktitle = {ACM Multimedia},
+  year      = {2026},
+}</div>
+  </section>
+
+</div>
+
+<footer>
+  LITORA &middot; CC-BY-NC-SA 4.0 &middot; <a href="https://github.com/sonicsoul9513-a11y/LITORA-dataset">GitHub</a>
+</footer>
+
+</body>
+</html>
