@@ -3,6 +3,7 @@
 **L**ighting-grounded **I**mage/**T**ext **O**pen **R**elighting **A**ssets
 
 [![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+[![Dataset on HF](https://huggingface.co/datasets/huggingface/badges/resolve/main/dataset-on-hf-sm.svg)](https://huggingface.co/datasets/Kinseong/LITORA-bases)
 
 > **LITORA** is the first large-scale, openly-available portrait relighting dataset with **140K pairs** spanning **70K subjects** and **2,698 HDRI environments**, multimodal annotations, and per-sample quality metadata.
 
@@ -69,7 +70,11 @@ Fine-tuning OmniGen-v1 on LITORA yields cross-domain improvements on independent
 
 ## Download
 
-**Full release coming soon.** The dataset, pipeline code, QA-Gate framework, and random seeds for exact reproduction will be made available here.
+The full dataset is available on Hugging Face:
+
+**[Kinseong/LITORA-bases on Hugging Face](https://huggingface.co/datasets/Kinseong/LITORA-bases)** -- 140K pairs with masks, metadata, and per-sample quality scores.
+
+Pipeline code, QA-Gate framework, and random seeds for exact reproduction are available in this repository.
 
 ## Training Paradigms
 
