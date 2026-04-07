@@ -1,0 +1,64 @@
+Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+(CC BY-NC-SA 4.0)
+
+Copyright (c) 2026 Kinseong Un, Yanfeng Li, Qinquan Gao, Wei Deng,
+Su-Kit Tang, Ka-Hou Chan, Tao Tan, Yue Sun
+
+This license applies to the LITORA dataset (images, masks, metadata,
+quality scores, and annotations).
+
+You are free to:
+
+  Share -- copy and redistribute the material in any medium or format
+  Adapt -- remix, transform, and build upon the material
+
+Under the following terms:
+
+  Attribution -- You must give appropriate credit, provide a link to the
+  license, and indicate if changes were made. You may do so in any
+  reasonable manner, but not in any way that suggests the licensor
+  endorses you or your use.
+
+  NonCommercial -- You may not use the material for commercial purposes.
+
+  ShareAlike -- If you remix, transform, or build upon the material, you
+  must distribute your contributions under the same license as the
+  original.
+
+  No additional restrictions -- You may not apply legal terms or
+  technological measures that legally restrict others from doing anything
+  the license permits.
+
+Full legal text:
+https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+
+------------------------------------------------------------------------
+
+Source Data Licenses
+------------------------------------------------------------------------
+
+FFHQ Portraits:
+  Individual images were published on Flickr under mixed licenses:
+    - Creative Commons Attribution 2.0 (CC BY 2.0)
+    - Creative Commons Attribution-NonCommercial 2.0 (CC BY-NC 2.0)
+    - Public Domain Mark 1.0
+    - Public Domain CC0 1.0
+    - U.S. Government Works
+  All permit free use, redistribution, and adaptation for non-commercial
+  purposes. Some require attribution to the original author and indication
+  of changes. Per-image license and original author are recorded in the
+  metadata.
+  The FFHQ dataset (metadata, download script, documentation) is
+  CC BY-NC-SA 4.0 by NVIDIA Corporation.
+  https://github.com/NVlabs/ffhq-dataset
+
+HDRI Environment Maps:
+  Poly Haven (https://polyhaven.com) -- CC0 1.0
+  ambientCG (https://ambientcg.com) -- CC0 1.0
+  Source attribution is preserved in the metadata. CC0 assets may be used
+  for any purpose without restriction.
+
+------------------------------------------------------------------------
+
+Pipeline code and QA-Gate framework are licensed separately under the
+MIT License. See LICENSE-CODE.

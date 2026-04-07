@@ -98,9 +98,18 @@ LITORA supports two downstream conditioning modes:
 
 ## License
 
-- **Dataset**: CC-BY-NC-SA 4.0 (inherited from FFHQ)
-- **HDRI assets**: CC0 (Poly Haven, ambientCG) -- source attribution preserved
-- **Code**: MIT
+LITORA is distributed under **CC-BY-NC-SA 4.0**, inheriting the most restrictive terms from its source data.
+
+The individual FFHQ images were published on Flickr under mixed licenses (CC BY 2.0, CC BY-NC 2.0, Public Domain Mark 1.0, Public Domain CC0 1.0, or U.S. Government Works). All permit free use, redistribution, and adaptation for non-commercial purposes; some require attribution to the original author and indication of changes. The FFHQ dataset itself (metadata, scripts, documentation) is CC-BY-NC-SA 4.0 by NVIDIA Corporation.
+
+| Component | License |
+|---|---|
+| LITORA dataset | CC-BY-NC-SA 4.0 |
+| Source portraits | FFHQ -- mixed licenses (CC BY 2.0, CC BY-NC 2.0, Public Domain); per-image license in metadata |
+| HDRI assets | CC0 (Poly Haven, ambientCG) -- source attribution preserved |
+| Code | MIT |
+
+You may use, redistribute, and adapt LITORA for non-commercial purposes, provided you (a) give appropriate credit by citing our paper, (b) indicate any changes made, and (c) distribute derivative works under the same license.
 
 ## Acknowledgments
 
